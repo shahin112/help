@@ -26,7 +26,7 @@ const imageSelected = (e) => {
             :class="{ '!border-red-500': oversizeImage }"
         >
             <img
-                :src="preview ?? '/storage/images/listing/img7.png'"
+                :src="preview ?? '/uploads/img/defult.png'"
                 class="object-cover object-center w-full h-full"
                 alt=""
             />
