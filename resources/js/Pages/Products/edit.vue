@@ -1,12 +1,38 @@
+<script setup>
+import ImageUpload from "@/Components/ImageUpload.vue";
+import { Link } from "@inertiajs/vue3";
+import { useForm } from "@inertiajs/vue3";
 
+const props = defineProps({
+    errors: Object,
+    product: Object,
+});
+
+const form = useForm({
+    name: props.product.name,
+    price: props.product.price,
+    image: props.product.image,
+    _method:"PUT"
+});
+
+ 
+
+const updateProduct = () => {
+    form.post(route("products.update", props.product.id), {
+        onFinish: () => form.reset(),
+    });
+};
+</script>
 <template>
-
     <div class="container mx-auto max-w-lg bg-white rounded-lg shadow-md p-6">
         <h1 class="text-2xl font-bold mb-5 text-gray-800">Edit Product</h1>
         <form @submit.prevent="updateProduct()">
-
             <div class="mb-4">
-                <label for="exampleInputEmail1" class="block text-gray-700 font-medium mb-2">Product Name</label>
+                <label
+                    for="exampleInputEmail1"
+                    class="block text-gray-700 font-medium mb-2"
+                    >Product Name</label
+                >
                 <input
                     v-model="form.name"
                     type="text"
@@ -14,13 +40,15 @@
                     id="exampleInputEmail1"
                     placeholder="Product Name"
                     class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                >
-
+                />
             </div>
 
-
             <div class="mb-4">
-                <label for="exampleInputPassword1" class="block text-gray-700 font-medium mb-2">Product Price</label>
+                <label
+                    for="exampleInputPassword1"
+                    class="block text-gray-700 font-medium mb-2"
+                    >Product Price</label
+                >
                 <input
                     v-model="form.price"
                     type="number"
@@ -28,23 +56,21 @@
                     id="exampleInputPassword1"
                     placeholder="Product Price"
                     class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                >
-
+                />
             </div>
-<!--<pre>{{form.image}}</pre>-->
-            <!-- File Input -->
-<pre>{{props.product?.image}}</pre>
-            <label for="exampleInputPassword1" class="block text-gray-700 font-medium mb-2">Image Uploads</label>
-<!--            <img :src="'/uploads/img/'+product.image" alt="">-->
-            <input
-                type="file"
-                name="image"
-                id=""
 
-                class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                @input="props.product.image=$event.target.files[0]"
+            <!-- File Input -->
+
+            <label
+                for="exampleInputPassword1"
+                class="block text-gray-700 font-medium mb-2"
+                >Image Uploads</label
             >
 
+            <ImageUpload
+                :productImage="product.image"
+                @image="(e) => (form.image = e)"
+            />
 
             <!-- Submit Button -->
             <div>
@@ -54,36 +80,12 @@
                 >
                     Update Product
                 </button>
-                <Link class="bg-red-500 hover:bg-red-700 text-white font-bold ml-2.5 py-3 px-8 rounded" :href="route('products.index')">Back</Link>
+                <Link
+                    class="bg-red-500 hover:bg-red-700 text-white font-bold ml-2.5 py-3 px-8 rounded"
+                    :href="route('products.index')"
+                    >Back</Link
+                >
             </div>
         </form>
     </div>
 </template>
-
-<script setup>
-import {Link} from "@inertiajs/vue3";
-import {useForm} from "@inertiajs/vue3";
-
-const props = defineProps({
-    errors: Object,
-    product: Array
-})
-
-//const props = defineProps(['product', 'errors']);
-
-
-const form = useForm({
-    name: props.product.name,
-    price: props.product.price,
-    image: props.product.image,
-
-})
-
-const updateProduct = () => {
-    form.put(route('products.update', props.product.id))
-}
-
-</script>
-
-
-
